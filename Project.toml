@@ -1,0 +1,4 @@
+name = "LibLabJack"
+uuid = "961e5755-77e0-4113-a782-3f305e67c3ba"
+authors = ["wikphi "]
+version = "0.1.0"
