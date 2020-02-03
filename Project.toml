@@ -1,4 +1,8 @@
-name = "LibLabJack"
+name = "LabJack"
 uuid = "961e5755-77e0-4113-a782-3f305e67c3ba"
 authors = ["wikphi "]
 version = "0.1.0"
+
+[deps]
+CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
+Clang = "40e3b903-d033-50b4-a0cc-940c62c95e31"
