@@ -1,9 +1,15 @@
 
 # LabJackM constants and types
 
-@cenum IODirection::Cint READ = 0 WRITE = 1
+const LJM_StreamReadCallback = Ptr{Cvoid}
+const LJM_DeviceReconnectCallback = Ptr{Cvoid}
 
-@cenum LJMDataType::Cint begin
+@cenum IODirection::Int32 begin
+    READ = 0
+    WRITE = 1
+end
+
+@cenum LJMDataType::Int32 begin
     UINT16  = 0
     UINT32  = 1
     INT32   = 2
@@ -12,7 +18,7 @@
     STRING  = 98
 end
 
-@cenum LJMStringConstant::Cint begin
+@cenum LJMStringConstant::Int32 begin
     ALLOCATION_SIZE     = 50 # Buffer size include null-terminator
     MAX_SIZE            = 49 # String length
     MAX_NAME_SIZE       = 256
@@ -20,12 +26,12 @@ end
     IPv4_STRING_SIZE    = 16 # for INE_ADDRSTRLEN
 end
 
-const BYTES_PER_REGISTER::Cint = 2
+const BYTES_PER_REGISTER = 2
 
 "NamesToAddresses uses this when a register name is not found"
-const INVALID_NAME_ADDRESS::Cint = -1
+const INVALID_NAME_ADDRESS = -1
 
-@cenum DeviceType::Cint begin
+@cenum DeviceType::Int32 begin
     dtANY   = 0
     T4      = 4
     T7      = 7
@@ -33,7 +39,7 @@ const INVALID_NAME_ADDRESS::Cint = -1
     TSERIES = 84
 end
 
-@cenum ConnectionType::Cint begin
+@cenum ConnectionType::Int32 begin
     ctANY           = 0
     ctANY_TCP       = 0
     USB             = 1
@@ -51,7 +57,7 @@ end
     WIFI_ANY        = 10
 end
 
-@cenum NetworkConstant::Cint begin
+@cenum NetworkConstant::Int32 begin
     TCP_PORT            = 502
     ETHERNET_UDP_PORT   = 52362
     WIFI_UDP_PORT       = 502
@@ -59,9 +65,9 @@ end
     NO_PORT             = 0
 end
 
-const LIST_ALL_SIZE::Cint = 128
+const LIST_ALL_SIZE = 128
 
-@cenum Timeouts::Cint begin
+@cenum Timeouts::Int32 begin
     NO_TIMEOUT                                  = 0
     DEFAULT_USB_SEND_RECEIVE_TIMEOUT_MS         = 2600
     DEFAULT_ETHERNET_OPEN_TIMEOUT_MS            = 1000
