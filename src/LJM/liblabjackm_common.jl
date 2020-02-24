@@ -31,7 +31,7 @@ const BYTES_PER_REGISTER = 2
 "NamesToAddresses uses this when a register name is not found"
 const INVALID_NAME_ADDRESS = -1
 
-@cenum DeviceType::Int32 begin
+@cenum LJDeviceType::Int32 begin
     dtANY   = 0
     T4      = 4
     T7      = 7
@@ -39,7 +39,7 @@ const INVALID_NAME_ADDRESS = -1
     TSERIES = 84
 end
 
-@cenum ConnectionType::Int32 begin
+@cenum LJConnectionType::Int32 begin
     ctANY           = 0
     ctANY_TCP       = 0
     USB             = 1
@@ -57,7 +57,7 @@ end
     WIFI_ANY        = 10
 end
 
-@cenum NetworkConstant::Int32 begin
+@cenum LJNetworkConstant::Int32 begin
     TCP_PORT            = 502
     ETHERNET_UDP_PORT   = 52362
     WIFI_UDP_PORT       = 502
@@ -67,7 +67,7 @@ end
 
 const LIST_ALL_SIZE = 128
 
-@cenum Timeouts::Int32 begin
+@cenum LJTimeouts::Int32 begin
     NO_TIMEOUT                                  = 0
     DEFAULT_USB_SEND_RECEIVE_TIMEOUT_MS         = 2600
     DEFAULT_ETHERNET_OPEN_TIMEOUT_MS            = 1000
@@ -76,7 +76,7 @@ const LIST_ALL_SIZE = 128
     DEFAULT_WIFI_SEND_RECEIVE_TIMEOUT_MS        = 4000
 end
 
-@cenum ThermocoupleType::Clong begin
+@cenum LJThermocouple::Clong begin
     ttB = 6001
     ttE = 6002
     ttJ = 6003
@@ -87,4 +87,3 @@ end
     ttT = 6008
     ttC = 6009
 end
-
