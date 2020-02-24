@@ -2,6 +2,7 @@ module LabJack
 
 include("LJM/LJM.jl")
 using .LJM
+include("util.jl")
 include("device.jl")
 include("io.jl")
 export LJM

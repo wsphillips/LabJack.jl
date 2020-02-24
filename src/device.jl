@@ -4,7 +4,7 @@ struct LJDevice
     handle::Cint
 end
 
-function lsdev(dt::LJDeviceType, ct::LJConnectionType)
+function lsdev(dt::LJDeviceType=dtANY, ct::LJConnectionType=ctANY)
 
     found = Ref{Int32}()
     devtypes = Vector{Int32}(undef, LJM.LIST_ALL_SIZE)
@@ -12,7 +12,7 @@ function lsdev(dt::LJDeviceType, ct::LJConnectionType)
     serials = Vector{Int32}(undef, LJM.LIST_ALL_SIZE)
     ips = Vector{Int32}(undef, LJM.LIST_ALL_SIZE)
 
-    LJM.ListAll(dt,ct,found,devtypes,ctypes,serials,ips)
+    LJM.ListAll(dt,ct,found,devtypes,ctypes,serials,ips) |> errorcheck
 
     found[] == Int32(0) && return nothing
 
@@ -27,12 +27,12 @@ end
 
 function Base.open(dt::LJDeviceType, ct::LJConnectionType)
     handle = Ref{Cint}()
-    LJM.Open(dt, ct, "ANY", handle)
+    LJM.Open(dt, ct, "ANY", handle) |> errorcheck
     return LJDevice(handle[])
 end
 
 function Base.close(dev::LJDevice)
-    LJM.Close(dev.handle)
+    LJM.Close(dev.handle) |> errorcheck
     dev = nothing
     return
 end
