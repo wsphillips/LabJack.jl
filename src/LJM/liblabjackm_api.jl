@@ -191,7 +191,7 @@ function LookupConstantName(Scope, ConstantValue::Cdouble, ConstantName)
     ccall((:LJM_LookupConstantName, :libLabJackM), Cint, (Cstring, Cdouble, Cstring), Scope, ConstantValue, ConstantName)
 end
 
-function ErrorToString(ErrorCode::Cint, ErrorString)
+function ErrorToString(ErrorCode::Integer, ErrorString)
     ccall((:LJM_ErrorToString, :libLabJackM), Cint, (Cint, Cstring), ErrorCode, ErrorString)
 end
 

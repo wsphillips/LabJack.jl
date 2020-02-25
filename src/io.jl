@@ -2,7 +2,6 @@
 # write functions
 
 function Base.write(loc::String, val::Float64, dev::LJDevice=DefaultDev())
-
     LJM.eWriteName(dev.handle, loc, val) |> errorcheck
     return
 end

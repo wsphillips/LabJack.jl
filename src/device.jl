@@ -14,7 +14,7 @@ function lsdev(dt::LJDeviceType=dtANY, ct::LJConnectionType=ctANY)
 
     LJM.ListAll(dt,ct,found,devtypes,ctypes,serials,ips) |> errorcheck
 
-    found[] == Int32(0) && return nothing
+    found[] == 0 && return nothing
 
     for i in 1:found[]
         println("\n[Device #", i, "]")

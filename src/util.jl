@@ -1,10 +1,12 @@
 
 function errorcheck(error::Integer)
-    Int(error) == 0 && return nothing
-    str = String()
-    ErrorToString(error, str)
-
-    error > 0 && @warn str
-    error < 0 && throw(str)
+    error == 0 && return nothing
+    str = " "^Int(LJM.MAX_NAME_SIZE)
+    LJM.ErrorToString(error, str)
+    error > 0 && @warn unsafe_string(pointer(str))
+    error < 0 && throw(unsafe_string(pointer(str)))
     return nothing
+end
+
+function getaddress(name::String)
 end
