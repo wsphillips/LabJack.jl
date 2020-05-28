@@ -11,7 +11,8 @@ export LJM
 # High-level API
 include("util.jl")
 include("device.jl")
-include("io.jl")
+include("analog.jl")
+include("digital.jl")
 
 # Common use LJM constants
 export dtANY, T7, TSERIES, ctANY, USB, ETHERNET
@@ -20,5 +21,7 @@ export dtANY, T7, TSERIES, ctANY, USB, ETHERNET
 
 export LJDevice
 export lsdev, open, close, DefaultDev
-export write, read
+export write_digital, read_digital
+export write_analog, read_analo_digital
+export write_analog, read_analog
 end # module
