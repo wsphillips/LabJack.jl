@@ -1,8 +1,8 @@
 using LabJack
 
-#lsdev()
+lsdev()
 
-dev = open(dtANY, ctANY)
+dev = open(dtT7, ctANY)
 
 write_digital("EIO0", 0, dev)
 

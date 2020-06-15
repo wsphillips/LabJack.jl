@@ -4,7 +4,7 @@ struct LJDevice
     handle::Cint
 end
 
-function lsdev(dt::LJDeviceType=dtANY, ct::LJConnectionType=ctANY)
+function lsdev(dt::LJDeviceType=dtANY, ct::LJConnectionType=ctANY; quiet = false)
 
     found = Ref{Int32}()
     devtypes = Vector{Int32}(undef, LJM.LIST_ALL_SIZE)
@@ -15,6 +15,7 @@ function lsdev(dt::LJDeviceType=dtANY, ct::LJConnectionType=ctANY)
     LJM.ListAll(dt,ct,found,devtypes,ctypes,serials,ips) |> errorcheck
 
     found[] == 0 && return nothing
+    quiet && return found[]
 
     for i in 1:found[]
         println("\n[Device #", i, "]")
@@ -37,4 +38,3 @@ function Base.close(dev::LJDevice)
     return
 end
 
-DefaultDev() = open(dtANY, ctANY)

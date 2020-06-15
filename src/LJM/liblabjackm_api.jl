@@ -39,8 +39,8 @@ function eWriteAddress(Handle::Cint, Address::Cint, Type::Cint, Value::Cdouble)
     ccall((:LJM_eWriteAddress, :libLabJackM), Cint, (Cint, Cint, Cint, Cdouble), Handle, Address, Type, Value)
 end
 
-function eReadAddress(Handle::Cint, Address::Cint, Type::Cint, Value::Ref{Cdouble})
-    ccall((:LJM_eReadAddress, :libLabJackM), Cint, (Cint, Cint, Cint, Ref{Cdouble}), Handle, Address, Type, Value)
+function eReadAddress(Handle::Cint, Address::Cint, Address_Type::Cint, Value)
+    ccall((:LJM_eReadAddress, :libLabJackM), Cint, (Cint, Cint, Cint, Ptr{Cvoid}), Handle, Address, Address_Type, Value)
 end
 
 function eWriteName(Handle::Cint, Name::String, Value)

@@ -18,10 +18,20 @@ include("digital.jl")
 export dtANY, T7, TSERIES, ctANY, USB, ETHERNET
 
 # High-level types
-
 export LJDevice
 export lsdev, open, close, DefaultDev
 export write_digital, read_digital
 export write_analog, read_analo_digital
 export write_analog, read_analog
+
+global DEFAULT_LJDEVICE
+
+function __init__()
+    if lsdev(; quiet = true) !== nothing
+        global DEFAULT_LJDEVICE = open(dtANY, ctANY)
+    else
+        @warn "No LabJack device found."
+    end
+end
+
 end # module
