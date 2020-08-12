@@ -26,7 +26,7 @@ export write_analog, read_analog
 
 global DEFAULT_LJDEVICE
 
-function __init__()
+function init_default()
     if lsdev(; quiet = true) !== nothing
         global DEFAULT_LJDEVICE = open(dtANY, ctANY)
     else
