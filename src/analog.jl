@@ -5,7 +5,7 @@ function write_analog(name::String, value::T, dev::LJDevice=DEFAULT_LJDEVICE) wh
 end
 
 function read_analog(name::String, dev::LJDevice=DEFAULT_LJDEVICE)
-    value = Ref{Float32}()
+    value = Ref{Float64}()
     LJM.eReadName(dev.handle, name, value) |> errorcheck
-    return value[]
+    return Float32(value[])
 end
