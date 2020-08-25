@@ -21,7 +21,6 @@ export dtANY, T7, TSERIES, ctANY, USB, ETHERNET
 export LJDevice
 export lsdev, open, close, DefaultDev
 export write_digital, read_digital
-export write_analog, read_analo_digital
 export write_analog, read_analog
 
 global DEFAULT_LJDEVICE

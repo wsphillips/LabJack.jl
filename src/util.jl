@@ -7,6 +7,3 @@ function errorcheck(error::Integer)
     error < 0 && throw(unsafe_string(pointer(str)))
     return nothing
 end
-
-function getaddress(name::String)
-end

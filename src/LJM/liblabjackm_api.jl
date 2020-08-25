@@ -7,7 +7,7 @@ function ListAllS(DeviceType::LJDeviceType, ConnectionType::LJConnectionType, Nu
     ccall((:LJM_ListAllS, :libLabJackM), Cint, (Cstring, Cstring, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cint}), DeviceType, ConnectionType, NumFound, aDeviceTypes, aConnectionTypes, aSerialNumbers, aIPAddresses)
 end
 
-function ListAllExtended(DeviceType::Cint, ConnectionType::Cint, NumAddresses::Cint, aAddresses::Ref{Cint}, aNumRegs::Ref{Cint}, MaxNumFound::Cint, NumFound::Ref{Cint}, aDeviceTypes::Ref{Cint}, aConnectionTypes::Ref{Cint}, aSerialNumbers::Ref{Cint}, aIPAddresses::Ref{Cint}, aBytes::Ref{Cuchar})
+function ListAllExtended(DeviceType::LJDeviceType, ConnectionType::LJConnectionType, NumAddresses::Integer, aAddresses::Vector{Cint}, aNumRegs::Vector{Cint}, MaxNumFound::Integer, NumFound::Ref{Cint}, aDeviceTypes::Vector{Cint}, aConnectionTypes::Vector{Cint}, aSerialNumbers::Vector{Cint}, aIPAddresses::Vector{Cint}, aBytes::Vector{Cuchar})
     ccall((:LJM_ListAllExtended, :libLabJackM), Cint, (Cint, Cint, Cint, Ref{Cint}, Ref{Cint}, Cint, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cuchar}), DeviceType, ConnectionType, NumAddresses, aAddresses, aNumRegs, MaxNumFound, NumFound, aDeviceTypes, aConnectionTypes, aSerialNumbers, aIPAddresses, aBytes)
 end
 
@@ -35,12 +35,12 @@ function CleanInfo(InfoHandle::Cint)
     ccall((:LJM_CleanInfo, :libLabJackM), Cint, (Cint,), InfoHandle)
 end
 
-function eWriteAddress(Handle::Cint, Address::Cint, Type::Cint, Value::Cdouble)
-    ccall((:LJM_eWriteAddress, :libLabJackM), Cint, (Cint, Cint, Cint, Cdouble), Handle, Address, Type, Value)
+function eWriteAddress(Handle::Cint, Address::Integer, type::LJMDataType, Value)
+    ccall((:LJM_eWriteAddress, :libLabJackM), Cint, (Cint, Cint, Cint, Cdouble), Handle, Address, type, Value)
 end
 
-function eReadAddress(Handle::Cint, Address::Cint, Address_Type::Cint, Value)
-    ccall((:LJM_eReadAddress, :libLabJackM), Cint, (Cint, Cint, Cint, Ptr{Cvoid}), Handle, Address, Address_Type, Value)
+function eReadAddress(Handle::Cint, Address::Integer, type::LJMDataType, Value::Ref{Cdouble})
+    ccall((:LJM_eReadAddress, :libLabJackM), Cint, (Cint, Cint, Cint, Ptr{Cdouble}), Handle, Address, type, Value)
 end
 
 function eWriteName(Handle::Cint, Name::String, Value)
@@ -48,115 +48,115 @@ function eWriteName(Handle::Cint, Name::String, Value)
 end
 
 function eReadName(Handle::Cint, Name::String, Value)
-    ccall((:LJM_eReadName, :libLabJackM), Cint, (Cint, Cstring, Ptr{Cvoid}), Handle, Name, Value)
+    ccall((:LJM_eReadName, :libLabJackM), Cint, (Cint, Cstring, Ptr{Cdouble}), Handle, Name, Value)
 end
 
-function eReadAddresses(Handle::Cint, NumFrames::Cint, aAddresses::Ref{Cint}, aTypes::Ref{Cint}, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eReadAddresses, :libLabJackM), Cint, (Cint, Cint, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, aAddresses, aTypes, aValues, ErrorAddress)
+function eReadAddresses(Handle::Cint, NumFrames::Integer, aAddresses::Vector{T}, aTypes::Vector{LJMDataType}, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint}) where {T <: Integer}
+    ccall((:LJM_eReadAddresses, :libLabJackM), Cint, (Cint, Cint, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, Cint.(aAddresses), aTypes, aValues, ErrorAddress)
 end
 
-function eReadNames(Handle::Cint, NumFrames::Cint, aNames::Ref{Cstring}, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
+function eReadNames(Handle::Cint, NumFrames::Integer, aNames::Vector{String}, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint})
     ccall((:LJM_eReadNames, :libLabJackM), Cint, (Cint, Cint, Ref{Cstring}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, aNames, aValues, ErrorAddress)
 end
 
-function eWriteAddresses(Handle::Cint, NumFrames::Cint, aAddresses::Ref{Cint}, aTypes::Ref{Cint}, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eWriteAddresses, :libLabJackM), Cint, (Cint, Cint, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, aAddresses, aTypes, aValues, ErrorAddress)
+function eWriteAddresses(Handle::Cint, NumFrames::Integer, aAddresses::Vector{T}, aTypes::Vector{LJMDataType}, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint}) where {T <: Integer}
+    ccall((:LJM_eWriteAddresses, :libLabJackM), Cint, (Cint, Cint, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, Cint.(aAddresses), aTypes, aValues, ErrorAddress)
 end
 
-function eWriteNames(Handle::Cint, NumFrames::Cint, aNames::Ref{Cstring}, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
+function eWriteNames(Handle::Cint, NumFrames::Integer, aNames::Vector{String}, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint})
     ccall((:LJM_eWriteNames, :libLabJackM), Cint, (Cint, Cint, Ref{Cstring}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, aNames, aValues, ErrorAddress)
 end
 
-function eReadAddressArray(Handle::Cint, Address::Cint, Type::Cint, NumValues::Cint, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eReadAddressArray, :libLabJackM), Cint, (Cint, Cint, Cint, Cint, Ref{Cdouble}, Ref{Cint}), Handle, Address, Type, NumValues, aValues, ErrorAddress)
+function eReadAddressArray(Handle::Cint, Address::Integer, type::LJMDataType, NumValues::Integer, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint})
+    ccall((:LJM_eReadAddressArray, :libLabJackM), Cint, (Cint, Cint, Cint, Cint, Ref{Cdouble}, Ref{Cint}), Handle, Address, type, NumValues, aValues, ErrorAddress)
 end
 
-function eReadNameArray(Handle::Cint, Name, NumValues::Cint, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
+function eReadNameArray(Handle::Cint, Name::String, NumValues::Integer, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint})
     ccall((:LJM_eReadNameArray, :libLabJackM), Cint, (Cint, Cstring, Cint, Ref{Cdouble}, Ref{Cint}), Handle, Name, NumValues, aValues, ErrorAddress)
 end
 
-function eWriteAddressArray(Handle::Cint, Address::Cint, Type::Cint, NumValues::Cint, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eWriteAddressArray, :libLabJackM), Cint, (Cint, Cint, Cint, Cint, Ref{Cdouble}, Ref{Cint}), Handle, Address, Type, NumValues, aValues, ErrorAddress)
+function eWriteAddressArray(Handle::Cint, Address::Integer, type::LJMDataType, NumValues::Integer, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint})
+    ccall((:LJM_eWriteAddressArray, :libLabJackM), Cint, (Cint, Cint, Cint, Cint, Ref{Cdouble}, Ref{Cint}), Handle, Address, type, NumValues, aValues, ErrorAddress)
 end
 
-function eWriteNameArray(Handle::Cint, Name, NumValues::Cint, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
+function eWriteNameArray(Handle::Cint, Name::String, NumValues::Integer, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint})
     ccall((:LJM_eWriteNameArray, :libLabJackM), Cint, (Cint, Cstring, Cint, Ref{Cdouble}, Ref{Cint}), Handle, Name, NumValues, aValues, ErrorAddress)
 end
 
-function eReadAddressByteArray(Handle::Cint, Address::Cint, NumBytes::Cint, aBytes, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eReadAddressByteArray, :libLabJackM), Cint, (Cint, Cint, Cint, Cstring, Ref{Cint}), Handle, Address, NumBytes, aBytes, ErrorAddress)
+function eReadAddressByteArray(Handle::Cint, Address::Integer, NumBytes::Integer, aBytes::Vector{UInt8}, ErrorAddress::Ref{Cint})
+    ccall((:LJM_eReadAddressByteArray, :libLabJackM), Cint, (Cint, Cint, Cint, Ref{UInt8}, Ref{Cint}), Handle, Address, NumBytes, aBytes, ErrorAddress)
 end
 
-function eReadNameByteArray(Handle::Cint, Name, NumBytes::Cint, aBytes, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eReadNameByteArray, :libLabJackM), Cint, (Cint, Cstring, Cint, Cstring, Ref{Cint}), Handle, Name, NumBytes, aBytes, ErrorAddress)
+function eReadNameByteArray(Handle::Cint, Name::String, NumBytes::Integer, aBytes::Vector{UInt8}, ErrorAddress::Ref{Cint})
+    ccall((:LJM_eReadNameByteArray, :libLabJackM), Cint, (Cint, Cstring, Cint, Ref{UInt8}, Ref{Cint}), Handle, Name, NumBytes, aBytes, ErrorAddress)
 end
 
-function eWriteAddressByteArray(Handle::Cint, Address::Cint, NumBytes::Cint, aBytes, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eWriteAddressByteArray, :libLabJackM), Cint, (Cint, Cint, Cint, Cstring, Ref{Cint}), Handle, Address, NumBytes, aBytes, ErrorAddress)
+function eWriteAddressByteArray(Handle::Cint, Address::Integer, NumBytes::Integer, aBytes::Vector{UInt8}, ErrorAddress::Ref{Cint})
+    ccall((:LJM_eWriteAddressByteArray, :libLabJackM), Cint, (Cint, Cint, Cint, Ref{UInt8}, Ref{Cint}), Handle, Address, NumBytes, aBytes, ErrorAddress)
 end
 
-function eWriteNameByteArray(Handle::Cint, Name, NumBytes::Cint, aBytes, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eWriteNameByteArray, :libLabJackM), Cint, (Cint, Cstring, Cint, Cstring, Ref{Cint}), Handle, Name, NumBytes, aBytes, ErrorAddress)
+function eWriteNameByteArray(Handle::Cint, Name::String, NumBytes::Integer, aBytes::Vector{UInt8}, ErrorAddress::Ref{Cint})
+    ccall((:LJM_eWriteNameByteArray, :libLabJackM), Cint, (Cint, Cstring, Cint, Ref{UInt8}, Ref{Cint}), Handle, Name, NumBytes, aBytes, ErrorAddress)
 end
 
-function eAddresses(Handle::Cint, NumFrames::Cint, aAddresses::Ref{Cint}, aTypes::Ref{Cint}, aWrites::Ref{Cint}, aNumValues::Ref{Cint}, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eAddresses, :libLabJackM), Cint, (Cint, Cint, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, aAddresses, aTypes, aWrites, aNumValues, aValues, ErrorAddress)
+function eAddresses(Handle::Cint, NumFrames::Integer, aAddresses::Vector{<:Integer}, aTypes::Vector{LJMDataType}, aWrites::Vector{<:Integer}, aNumValues::Vector{<:Integer}, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint}) where {T <: Integer}
+    ccall((:LJM_eAddresses, :libLabJackM), Cint, (Cint, Cint, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, Cint.(aAddresses), aTypes, Cint.(aWrites), Cint.(aNumValues), aValues, ErrorAddress)
 end
 
-function eNames(Handle::Cint, NumFrames::Cint, aNames::Ref{Cstring}, aWrites::Ref{Cint}, aNumValues::Ref{Cint}, aValues::Ref{Cdouble}, ErrorAddress::Ref{Cint})
-    ccall((:LJM_eNames, :libLabJackM), Cint, (Cint, Cint, Ref{Cstring}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, aNames, aWrites, aNumValues, aValues, ErrorAddress)
+function eNames(Handle::Cint, NumFrames::Integer, aNames::Vector{Cstring}, aWrites::Vector{<:Integer}, aNumValues::Vector{<:Integer}, aValues::Vector{Cdouble}, ErrorAddress::Ref{Cint})
+    ccall((:LJM_eNames, :libLabJackM), Cint, (Cint, Cint, Ref{Cstring}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}), Handle, NumFrames, aNames, Cint.(aWrites), Cint.(aNumValues), aValues, ErrorAddress)
 end
 
-function eReadNameString(Handle::Cint, Name, String)
-    ccall((:LJM_eReadNameString, :libLabJackM), Cint, (Cint, Cstring, Cstring), Handle, Name, String)
+function eReadNameString(Handle::Cint, Name::String, ret_string::Vector{UInt8})
+    ccall((:LJM_eReadNameString, :libLabJackM), Cint, (Cint, Cstring, Ptr{UInt8}), Handle, Name, ret_string)
 end
 
-function eReadAddressString(Handle::Cint, Address::Cint, String)
-    ccall((:LJM_eReadAddressString, :libLabJackM), Cint, (Cint, Cint, Cstring), Handle, Address, String)
+function eReadAddressString(Handle::Cint, Address::Integer, ret_string::Vector{UInt8})
+    ccall((:LJM_eReadAddressString, :libLabJackM), Cint, (Cint, Cint, Ptr{UInt8}), Handle, Address, ret_string)
 end
 
-function eWriteNameString(Handle::Cint, Name, String)
-    ccall((:LJM_eWriteNameString, :libLabJackM), Cint, (Cint, Cstring, Cstring), Handle, Name, String)
+function eWriteNameString(Handle::Cint, Name::String, input_string::String)
+    ccall((:LJM_eWriteNameString, :libLabJackM), Cint, (Cint, Cstring, Cstring), Handle, Name, input_string)
 end
 
-function eWriteAddressString(Handle::Cint, Address::Cint, String)
-    ccall((:LJM_eWriteAddressString, :libLabJackM), Cint, (Cint, Cint, Cstring), Handle, Address, String)
+function eWriteAddressString(Handle::Cint, Address::Integer, input_string::String)
+    ccall((:LJM_eWriteAddressString, :libLabJackM), Cint, (Cint, Cint, Cstring), Handle, Address, input_string)
 end
 
-function eStreamStart(Handle::Cint, ScansPerRead::Cint, NumAddresses::Cint, aScanList::Ref{Cint}, ScanRate::Ref{Cdouble})
-    ccall((:LJM_eStreamStart, :libLabJackM), Cint, (Cint, Cint, Cint, Ref{Cint}, Ref{Cdouble}), Handle, ScansPerRead, NumAddresses, aScanList, ScanRate)
+function eStreamStart(Handle::Cint, ScansPerRead::Integer, NumAddresses::Integer, aScanList::Vector{<:Integer}, ScanRate::Ref{Cdouble})
+    ccall((:LJM_eStreamStart, :libLabJackM), Cint, (Cint, Cint, Cint, Ref{Cint}, Ref{Cdouble}), Handle, ScansPerRead, NumAddresses, Cint.(aScanList), ScanRate)
 end
 
-function eStreamRead(Handle::Cint, aData::Ref{Cdouble}, DeviceScanBacklog::Ref{Cint}, LJMScanBacklog::Ref{Cint})
+function eStreamRead(Handle::Cint, aData::Vector{Cdouble}, DeviceScanBacklog::Ref{Cint}, LJMScanBacklog::Ref{Cint})
     ccall((:LJM_eStreamRead, :libLabJackM), Cint, (Cint, Ref{Cdouble}, Ref{Cint}, Ref{Cint}), Handle, aData, DeviceScanBacklog, LJMScanBacklog)
 end
 
-function SetStreamCallback(Handle::Cint, Callback::LJM_StreamReadCallback, Arg::Ref{Cvoid})
-    ccall((:LJM_SetStreamCallback, :libLabJackM), Cint, (Cint, LJM_StreamReadCallback, Ref{Cvoid}), Handle, Callback, Arg)
+function SetStreamCallback(Handle::Cint, Callback::LJM_StreamReadCallback, Arg::T) where {T}
+    ccall((:LJM_SetStreamCallback, :libLabJackM), Cint, (Cint, LJM_StreamReadCallback, Ptr{T}), Handle, Callback, Arg)
 end
 
 function eStreamStop(Handle::Cint)
     ccall((:LJM_eStreamStop, :libLabJackM), Cint, (Cint,), Handle)
 end
 
-function StreamBurst(Handle::Cint, NumAddresses::Cint, aScanList::Ref{Cint}, ScanRate::Ref{Cdouble}, NumScans::UInt32, aData::Ref{Cdouble})
-    ccall((:LJM_StreamBurst, :libLabJackM), Cint, (Cint, Cint, Ref{Cint}, Ref{Cdouble}, UInt32, Ref{Cdouble}), Handle, NumAddresses, aScanList, ScanRate, NumScans, aData)
+function StreamBurst(Handle::Cint, NumAddresses::Integer, aScanList::Vector{<:Integer}, ScanRate::Ref{Cdouble}, NumScans::Integer, aData::Vector{Cdouble})
+    ccall((:LJM_StreamBurst, :libLabJackM), Cint, (Cint, Cint, Ref{Cint}, Ref{Cdouble}, UInt32, Ref{Cdouble}), Handle, NumAddresses, Cint.(aScanList), ScanRate, NumScans, aData)
 end
 
 function GetStreamTCPReceiveBufferStatus(Handle::Cint, ReceiveBufferBytesSize::Ref{UInt32}, ReceiveBufferBytesBacklog::Ref{UInt32})
     ccall((:LJM_GetStreamTCPReceiveBufferStatus, :libLabJackM), Cint, (Cint, Ref{UInt32}, Ref{UInt32}), Handle, ReceiveBufferBytesSize, ReceiveBufferBytesBacklog)
 end
 
-function WriteRaw(Handle::Cint, Data::Ref{Cuchar}, NumBytes::Cint)
+function WriteRaw(Handle::Cint, Data::Vector{Cuchar}, NumBytes::Integer)
     ccall((:LJM_WriteRaw, :libLabJackM), Cint, (Cint, Ref{Cuchar}, Cint), Handle, Data, NumBytes)
 end
 
-function ReadRaw(Handle::Cint, Data::Ref{Cuchar}, NumBytes::Cint)
+function ReadRaw(Handle::Cint, Data::Vector{Cuchar}, NumBytes::Integer)
     ccall((:LJM_ReadRaw, :libLabJackM), Cint, (Cint, Ref{Cuchar}, Cint), Handle, Data, NumBytes)
 end
 
-function AddressesToMBFB(MaxBytesPerMBFB::Cint, aAddresses::Ref{Cint}, aTypes::Ref{Cint}, aWrites::Ref{Cint}, aNumValues::Ref{Cint}, aValues::Ref{Cdouble}, NumFrames::Ref{Cint}, aMBFBCommand::Ref{Cuchar})
-    ccall((:LJM_AddressesToMBFB, :libLabJackM), Cint, (Cint, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}, Ref{Cuchar}), MaxBytesPerMBFB, aAddresses, aTypes, aWrites, aNumValues, aValues, NumFrames, aMBFBCommand)
+function AddressesToMBFB(MaxBytesPerMBFB::Integer, aAddresses::Ref{<:Integer}, aTypes::Vector{LJMDataType}, aWrites::Vector{<:Integer}, aNumValues::Vector{<:Integer}, aValues::Vector{Cdouble}, NumFrames::Vector{Cint}, aMBFBCommand::Vector{Cuchar})
+    ccall((:LJM_AddressesToMBFB, :libLabJackM), Cint, (Cint, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cint}, Ref{Cuchar}), MaxBytesPerMBFB, Cint.(aAddresses), aTypes, Cint.(aWrites), Cint.(aNumValues), aValues, NumFrames, aMBFBCommand)
 end
 
 function MBFBComm(Handle::Cint, UnitID::Cuchar, aMBFB::Ref{Cuchar}, ErrorAddress::Ref{Cint})
@@ -175,20 +175,20 @@ function NameToAddress(Name, Address::Ref{Cint}, Type::Ref{Cint})
     ccall((:LJM_NameToAddress, :libLabJackM), Cint, (Cstring, Ref{Cint}, Ref{Cint}), Name, Address, Type)
 end
 
-function AddressesToTypes(NumAddresses::Cint, aAddresses::Ref{Cint}, aTypes::Ref{Cint})
-    ccall((:LJM_AddressesToTypes, :libLabJackM), Cint, (Cint, Ref{Cint}, Ref{Cint}), NumAddresses, aAddresses, aTypes)
+function AddressesToTypes(NumAddresses::Integer, aAddresses::Vector{<:Integer}, aTypes::Vector{Cint})
+    ccall((:LJM_AddressesToTypes, :libLabJackM), Cint, (Cint, Ref{Cint}, Ref{Cint}), NumAddresses, Cint.(aAddresses), aTypes)
 end
 
-function AddressToType(Address::Cint, Type::Ref{Cint})
+function AddressToType(Address::Integer, Type::Ref{Cint})
     ccall((:LJM_AddressToType, :libLabJackM), Cint, (Cint, Ref{Cint}), Address, Type)
 end
 
-function LookupConstantValue(Scope, ConstantName, ConstantValue::Ref{Cdouble})
+function LookupConstantValue(Scope::String, ConstantName::String, ConstantValue::Ref{Cdouble})
     ccall((:LJM_LookupConstantValue, :libLabJackM), Cint, (Cstring, Cstring, Ref{Cdouble}), Scope, ConstantName, ConstantValue)
 end
 
-function LookupConstantName(Scope, ConstantValue::Cdouble, ConstantName)
-    ccall((:LJM_LookupConstantName, :libLabJackM), Cint, (Cstring, Cdouble, Cstring), Scope, ConstantValue, ConstantName)
+function LookupConstantName(Scope::String, ConstantValue::Cdouble, ConstantName::Vector{UInt8})
+    ccall((:LJM_LookupConstantName, :libLabJackM), Cint, (Cstring, Cdouble, Ref{UInt8}), Scope, ConstantValue, ConstantName)
 end
 
 function ErrorToString(ErrorCode::Integer, ErrorString)
@@ -199,11 +199,11 @@ function LoadConstants()
     ccall((:LJM_LoadConstants, :libLabJackM), Cint, ())
 end
 
-function LoadConstantsFromFile(FileName)
+function LoadConstantsFromFile(FileName::String)
     ccall((:LJM_LoadConstantsFromFile, :libLabJackM), Cint, (Cstring,), FileName)
 end
 
-function LoadConstantsFromString(JsonString)
+function LoadConstantsFromString(JsonString::String)
     ccall((:LJM_LoadConstantsFromString, :libLabJackM), Cint, (Cstring,), JsonString)
 end
 
