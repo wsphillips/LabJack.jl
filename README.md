@@ -1,4 +1,4 @@
-# LibLabJack.jl
+# LabJack.jl
 Julia interface to the LJM library, used to control LabJack DAQ devices. Only a few
 convenience functions are provided for now (although a more thorough idiomatic Julia
 interface may be implemented in the future). The full LJM C API is wrapped and callable from Julia
@@ -24,7 +24,7 @@ LabJack.init_default()
 # Read a value from analog input
 val = read_analog("AIN0")
 
-# Write to an anlog output:
+# Write to an analog output:
 write_analog("DAC0", 2.5)
 
 # Check the values of EIO digital registers:

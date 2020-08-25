@@ -1,8 +1,5 @@
 module LabJack
 
-# External dependencies
-using JSON3, OrderedCollections, DataStructures, PrettyTables
-
 # LibLabJackM wrapper module
 include("LJM/LJM.jl")
 using .LJM
@@ -31,6 +28,10 @@ function init_default()
     else
         @warn "No LabJack device found."
     end
+end
+
+function DefaultDev(dev::LJDevice)
+    global DEFAULT_LJDEVICE = dev
 end
 
 end # module

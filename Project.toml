@@ -1,11 +1,7 @@
 name = "LabJack"
 uuid = "961e5755-77e0-4113-a782-3f305e67c3ba"
 authors = ["Wiktor Phillips"]
-version = "0.1.0"
+version = "0.0.1"
 
 [deps]
 CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
-DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
-OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
-PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
